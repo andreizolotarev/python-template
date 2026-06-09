@@ -1,0 +1,52 @@
+# ── Python project Copier template ──────────────────────────────
+
+project_name:
+  type: str
+  help: Project name (kebab-case, for PyPI and CLI)
+  default: my-project
+
+project_slug:
+  type: str
+  help: Python package name (snake_case)
+  default: my_project
+
+description:
+  type: str
+  help: Short project description
+  default: A Python project
+
+version:
+  type: str
+  help: Initial version
+  default: 0.1.0
+
+python_version:
+  type: str
+  help: Python version
+  default: "3.13"
+
+author_name:
+  type: str
+  help: Author name
+  default: author
+
+author_email:
+  type: str
+  help: Author email
+  default: author@example.com
+
+_templates_suffix: ""
+
+_copy_without_render:
+  - copier.yml
+  - opencode.json
+  - .gitignore
+
+_exclude:
+  - .venv
+  - __pycache__
+  - "*.pyc"
+  - ".git"
+
+# _tasks:
+#   - "uv sync"
