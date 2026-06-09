@@ -2,12 +2,6 @@
 
 {{ description }}
 
-## Development
-
-```bash
-uv sync
-```
-
 ## Generating a new project from this template
 
 This project was created from a [Copier](https://copier.readthedocs.io/) template.
@@ -29,6 +23,3 @@ After it within the created project run:
 uv sync
 git init
 ```
-## License
-
-MIT
