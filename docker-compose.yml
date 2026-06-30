@@ -1,0 +1,16 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: {{ project_name }}-dev
+    volumes:
+      - .:/workspace:cached
+      - venv:/workspace/.venv
+    environment:
+      - CONTEXT7_API_KEY=${CONTEXT7_API_KEY:-}
+    stdin_open: true
+    tty: true
+
+volumes:
+  venv:

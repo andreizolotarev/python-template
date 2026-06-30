@@ -35,12 +35,18 @@ author_email:
   help: Author email
   default: author@example.com
 
+use_docker:
+  type: bool
+  help: Set up Docker development environment
+  default: true
+
 _templates_suffix: ""
 
 _copy_without_render:
   - copier.yml
   - opencode.json
   - .gitignore
+  - .dockerignore
 
 _exclude:
   - .venv
