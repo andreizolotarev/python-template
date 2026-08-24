@@ -1,5 +1,22 @@
 {
   "$schema": "https://opencode.ai/config.json",
+    "command": {
+      "spec": {
+        "description": "Creates specification by asking clarifying questions",
+        "agent": "spec-writer",
+        "template": "Load and follow the skill spec in .opencode/skills/spec/SKILL.md.\n\nFeature: $ARGUMENTS"
+      },
+      "spec-impl": {
+        "description": "Implements an approved spec",
+        "agent": "spec-impl-writer",
+        "template": "Load and follow the skill spec in .opencode/skills/spec-impl/SKILL.md.\n\nFeature: $ARGUMENTS"
+      },
+      "verify-spec": {
+        "description": "Verifies the acceptance criteria of a spec, fixes code issues and reports results",
+        "agent": "spec-verifier",
+        "template": "Verify the acceptance criteria of the spec $ARGUMENTS.\n\nFind the spec file in `specs/` (the user may have written the number like `01`, the slug like `home-feed`, or the full name `01-home-feed`). Read it, locate the acceptance criteria section, verify each criterion, fix any code issues you find, mark the checkboxes in the spec file, and report a summary at the end."
+      }
+  },
   "mcp": {
     "playwright": {
       "type": "local",

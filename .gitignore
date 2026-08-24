@@ -27,3 +27,6 @@ Thumbs.db
 
 # Docker
 .dockerignore
+
+# Playwright MCP output (screenshots)
+.playwright-mcp/
