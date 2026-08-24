@@ -1,5 +1,19 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "bash": {
+      "git commit*": "deny",
+      "git push*": "deny",
+      "git reset*": "deny",
+      "git merge*": "deny",
+      "git rebase*": "deny",
+      "git clean*": "deny",
+      "git tag*": "deny",
+      "git branch -D*": "deny",
+      "git branch -d*": "deny",
+      "git branch --delete*": "deny"
+    }
+  },
     "command": {
       "spec": {
         "description": "Creates specification by asking clarifying questions",
@@ -15,6 +29,11 @@
         "description": "Verifies the acceptance criteria of a spec, fixes code issues and reports results",
         "agent": "spec-verifier",
         "template": "Verify the acceptance criteria of the spec $ARGUMENTS.\n\nFind the spec file in `specs/` (the user may have written the number like `01`, the slug like `home-feed`, or the full name `01-home-feed`). Read it, locate the acceptance criteria section, verify each criterion, fix any code issues you find, mark the checkboxes in the spec file, and report a summary at the end."
+      },
+      "commit-msg": {
+        "description": "Generate a commit message from current changes (does NOT commit)",
+        "agent": "commit-msg-writer",
+        "template": "Write a git commit message for the current changes.\n\nGit status:\n!`git status --short`\n\nStaged changes:\n!`git diff --staged`\n\nUnstaged changes:\n!`git diff`\n\nIf there are staged changes, base the message on those; otherwise use all changes. Follow the repo's existing commit style and use Conventional Commits prefixes (e.g. feat:, fix:, docs:, refactor:, chore:) where relevant, since the project uses release-please."
       }
   },
   "mcp": {

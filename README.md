@@ -68,12 +68,14 @@ These are opencode commands wired in `opencode.json`, backed by skills under `.o
 | `/spec` | Designs the spec by asking clarifying questions and saves it to `specs/NN-slug.md` | — |
 | `/spec-impl` | Validates the spec is `Approved` and implements it step by step on a branch | `<NN-slug>` |
 | `/verify-spec` | Verifies the acceptance criteria of a spec, fixes code, marks checkboxes | `<NN-slug>` |
+| `/commit-msg` | Generates a copy-ready commit message from current changes (does NOT commit) | — |
 
 Each command runs as a dedicated agent with locked-down permissions:
 
 - `spec-writer` — may only read the repo and write spec files under `specs/` (no source edits, only `ls`/`cat`/`date` in the shell).
 - `spec-impl-writer` — may edit source and run git branch/status plus `uv`/`pytest`/`ruff`, but cannot `commit`/`push`/`merge`.
 - `spec-verifier` — may run `uv`/`pytest`/`ruff`/`python` to verify; no arbitrary shell commands.
+- `commit-msg-writer` — read-only; produces a commit message but is denied `git commit`/`git push`/`git reset`, so it can never modify the repo.
 
 ---
 
