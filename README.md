@@ -78,7 +78,37 @@ Each command runs as a dedicated agent with locked-down permissions:
 - `commit-msg-writer` — read-only; produces a commit message but is denied `git commit`/`git push`/`git reset`, so it can never modify the repo.
 
 ---
+## Spec Driven Development Workflow
 
+1. **Describe the Problem:**
+Use the `/spec {Describe what you want}` skill to create the SDD artifact (markdown specification).
+
+2. **Review and Approval:**
+Review the generated artifact and approve (in the specification markdown file) it if it meets the requirements.
+
+3. **Implementation:**
+Run `/spec-impl @specification.md` to begin the SDD-guided implementation.
+
+4. **Step-by-Step Review:**
+Verify each step of the implementation iteratively.
+
+5. **Quick Adjustments:**
+For minor changes or corrections, use one-shot prompts.
+
+6. **Automatic Verification:**
+Use the `@spec-verifier @specification.md` agent to validate the implementation.
+
+7. **Mark as Implemented:**
+Update the spec status to "implemented".
+
+8. **Publish changes:**
+Upload the branch to the GitHub repository and open a pull request. You can use /commit-msg command to autogenerate commit message.
+
+9. **Merge and remote cleanup:**
+*Merge* the branch on GitHub and delete the branch in the remote repository.
+
+10. **Sync your local environment:**
+Switch to the `main` branch, *pull* the changes, and delete the local branch if necessary.
 ---
 
 ## Usage
