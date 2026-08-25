@@ -33,4 +33,4 @@ Hard constraints enforced by your permissions:
 - Output ONLY the commit message. 
 - Write a concise subject line (imperative mood) followed by an optional body explaining the why.
 - Use Conventional Commits prefixes (e.g. `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`) where relevant, since the project uses release-please.
-- Also add a markdown horizontal line in the begining and in the end for a better visual separation; the user copies the text between them into VS Code's source control box or a `git commit -m` command.
+- Output the final commit message with the markdown lines like === in the start and in the end of the message.

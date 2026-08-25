@@ -20,8 +20,9 @@ ENV UV_INSTALL_DIR=/usr/local/bin
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Install opencode (relocate binary to a system path)
-RUN curl -fsSL https://opencode.ai/install.sh | sh \
-    && [ -f /root/.local/bin/opencode ] && mv /root/.local/bin/opencode /usr/local/bin/ || true
+RUN curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path \
+    && mv /root/.opencode/bin/opencode /usr/local/bin/opencode \
+    && chmod +x /usr/local/bin/opencode
 
 # Install Playwright system deps + Chromium into a shared location
 ENV PLAYWRIGHT_BROWSERS_PATH=/usr/local/share/playwright
