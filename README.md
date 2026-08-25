@@ -28,6 +28,8 @@ git init
 
 The project includes a Docker-based development environment with opencode, Python/uv, Node.js, and Playwright pre-installed. The container runs as a non-root user (`dev`) whose UID/GID match the host, so files written in the mounted workspace belong to your host user instead of `root`.
 
+> **Develop inside the container.** All work must happen from a shell *inside* the container — installing dependencies (`uv sync`), running the app, tests, linting, and launching `opencode`. Do **not** run `uv`, `pytest`, `ruff`, or `opencode` on your host machine. The virtual environment lives in a container-only named Docker volume (a `.venv` on the host is ignored and invisible to the container), and a host-built environment is binary-incompatible with the container's Python.
+
 ### Build & run
 
 The image must be built with your host UID/GID so the container user matches the host:
@@ -56,6 +58,21 @@ CONTEXT7_API_KEY=your_key_here
 ```
 
 opencode will pick it up automatically inside the container.
+
+### VS Code (Remote - Containers)
+
+1. Install the **Dev Containers** extension (`ms-vscode-remote.remote-containers`) in VS Code.
+2. Build the image once (see *Build & run* above) — VS Code attaches to the existing image, so the UID/GID build args are still required.
+3. Start a persistent container shell:
+   ```bash
+   docker compose run -d dev bash
+   ```
+   (or keep `docker compose run --rm dev bash` running in a terminal — either way the container must stay up for VS Code to attach).
+4. In VS Code, open the Command Palette and run **Dev Containers: Attach to Running Container…**, then select the container named `<project_name>-dev`.
+5. In the attached VS Code window, open the `/workspace` folder. The integrated terminal is already inside the container — run `uv sync`, `opencode`, `pytest`, etc. from there.
+6. Point the Python extension at the in-container interpreter `/workspace/.venv/bin/python` so linting/type-checking use the container's environment (the `.venv` is a container-only named volume and is invisible on the host).
+
+Remember: develop *inside* the container (see the callout above) — do not run `uv`/`opencode` on the host.
 
 ## Spec-driven development (commands, skills & agents)
 

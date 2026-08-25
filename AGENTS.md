@@ -4,7 +4,7 @@ All commits must be made manually — do not commit automatically in agent mode.
 ## Dependency management
 This project uses `uv` as the package manager for everything.
 ## Development environment
-Development runs inside a Docker container as a non-root user (`dev`) matching the host UID/GID. Always build with the host IDs and execute commands inside the container:
+**All development happens inside the Docker container.** Never run `uv`, `pytest`, `ruff`, or `opencode` directly on the host — only via `docker compose run --rm dev ...`. The container runs as a non-root user (`dev`) matching the host UID/GID; always build with the host IDs and execute every command inside the container:
   - Build: `docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)`
   - Shell: `docker compose run --rm dev bash`
   - Run project: `docker compose run --rm dev python -m {{ project_slug }}`
