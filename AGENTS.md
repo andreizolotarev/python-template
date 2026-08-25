@@ -4,7 +4,7 @@ All commits must be made manually — do not commit automatically in agent mode.
 ## Dependency management
 This project uses `uv` as the package manager for everything.
 ## Development environment
-**All development happens inside the Docker container.** The container runs as a non-root user (`dev`) matching the host UID/GID; always build with the host IDs:
+**This template provides an isolated, reproducible development environment that runs entirely inside the Docker container.** The container runs as a non-root user (`dev`) matching the host UID/GID; always build with the host IDs:
   - Build: `docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)`
   - Shell: `docker compose run --rm dev bash`
 

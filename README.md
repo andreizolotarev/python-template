@@ -28,7 +28,7 @@ git init
 
 The project includes a Docker-based development environment with opencode, Python/uv, Node.js, and Playwright pre-installed. The container runs as a non-root user (`dev`) whose UID/GID match the host, so files written in the mounted workspace belong to your host user instead of `root`.
 
-> **Develop inside the container.** All work must happen from a shell *inside* the container — installing dependencies (`uv sync`), running the app, tests, linting, and launching `opencode`. Do **not** run `uv`, `pytest`, `ruff`, or `opencode` on your host machine. The virtual environment lives in a container-only named Docker volume (a `.venv` on the host is ignored and invisible to the container), and a host-built environment is binary-incompatible with the container's Python.
+> **Develop inside the container.** This template ships a fully isolated, reproducible development environment that runs entirely inside the container — Python/uv, Node.js, Playwright, and opencode are pre-installed, and your workspace files are owned by your host UID/GID so everything stays in sync with the host. You do your work from a shell/vscode *inside* the container: installing dependencies (`uv sync`), running the app, tests, linting, and launching `opencode`. The virtual environment lives in a container-only named Docker volume (a `.venv` on the host is ignored and invisible to the container), and a host-built environment is binary-incompatible with the container's Python — so the tooling is set up to run from within the container for a consistent, isolated experience.
 
 ### Build & run
 
@@ -49,15 +49,19 @@ opencode
 
 If you skip the `--build-arg` flags, the build fails (the `USER_ID`/`GROUP_ID` Dockerfile args are required).
 
-### Environment variables
+### Environment variables (Context7)
 
-Create a `.env` file in the project root:
+Context7 runs as a **local** MCP server inside the container (`@upstash/context7-mcp`, `type: "local"` in `opencode.json`) — there is no separate server to host. The `CONTEXT7_API_KEY` is **optional**: the server works without it using default rate limits, and you only need a key for higher limits or private repositories (get one at [context7.com/dashboard](https://context7.com/dashboard)).
+
+If you want a key, copy `.env.example` to `.env` and set it (otherwise skip this — no key means default rate-limited access):
 
 ```bash
-CONTEXT7_API_KEY=your_key_here
+cp .env.example .env
+# then, if desired, edit .env and set:
+# CONTEXT7_API_KEY=your_key_here
 ```
 
-opencode will pick it up automatically inside the container.
+docker compose passes the variable into the container, and opencode reads it automatically.
 
 ### VS Code (Remote - Containers)
 
@@ -72,7 +76,7 @@ opencode will pick it up automatically inside the container.
 5. In the attached VS Code window, open the `/workspace` folder. The integrated terminal is already inside the container — run `uv sync`, `opencode`, `pytest`, etc. from there.
 6. Point the Python extension at the in-container interpreter `/workspace/.venv/bin/python` so linting/type-checking use the container's environment (the `.venv` is a container-only named volume and is invisible on the host).
 
-Remember: develop *inside* the container (see the callout above) — do not run `uv`/`opencode` on the host.
+Remember: develop *inside* the container (see the callout above) — the tooling, `.venv`, and `opencode` all run from within the container for an isolated, reproducible setup.
 
 ## Spec-driven development (commands, skills & agents)
 
