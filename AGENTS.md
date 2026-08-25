@@ -4,14 +4,13 @@ All commits must be made manually — do not commit automatically in agent mode.
 ## Dependency management
 This project uses `uv` as the package manager for everything.
 ## Development environment
-Development runs inside a Docker container. Always execute commands inside the container:
-  - Build: `docker compose build`
+Development runs inside a Docker container as a non-root user (`dev`) matching the host UID/GID. Always build with the host IDs and execute commands inside the container:
+  - Build: `docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)`
   - Shell: `docker compose run --rm dev bash`
   - Run project: `docker compose run --rm dev python -m {{ project_slug }}`
   - Tests: `docker compose run --rm dev uv run pytest`
   - Lint: `docker compose run --rm dev uv run ruff check`
   - Format: `docker compose run --rm dev uv run ruff format`
-  - VS Code: reopen in DevContainer (`.devcontainer/devcontainer.json`)
 
 ## MCPs
   - Playwright: screenshots and any Playwright output go in .playwright-mcp/ (gitignored).

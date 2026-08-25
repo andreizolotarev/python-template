@@ -26,19 +26,15 @@ git init
 
 ## Docker development environment
 
-The project includes a Docker-based development environment with opencode, Python/uv, Node.js, and Playwright pre-installed.
+The project includes a Docker-based development environment with opencode, Python/uv, Node.js, and Playwright pre-installed. The container runs as a non-root user (`dev`) whose UID/GID match the host, so files written in the mounted workspace belong to your host user instead of `root`.
 
-### VS Code DevContainer (recommended)
+### Build & run
 
-1. Install the **Dev Containers** extension (`ms-vscode-remote.remote-containers`)
-2. Open the project folder in VS Code
-3. Run **"Dev Containers: Reopen in Container"** (`Ctrl+Shift+P`)
-
-### Terminal-only
+The image must be built with your host UID/GID so the container user matches the host:
 
 ```bash
-# Build the image
-docker compose build
+# Build the image (UID/GID are injected from the host automatically)
+docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)
 
 # Enter the container
 docker compose run --rm dev bash
@@ -48,6 +44,8 @@ uv sync
 git init
 opencode
 ```
+
+If you skip the `--build-arg` flags, the build fails (the `USER_ID`/`GROUP_ID` Dockerfile args are required).
 
 ### Environment variables
 
