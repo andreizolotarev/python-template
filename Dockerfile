@@ -32,5 +32,9 @@ RUN npx playwright install chromium --with-deps \
 RUN groupadd --gid ${GROUP_ID} dev \
     && useradd --uid ${USER_ID} --gid dev --create-home --shell /bin/bash dev
 
+# Marker so tools (e.g. AGENTS.md instructions) can detect they are running
+# inside the dev container and run commands directly instead of via docker.
+ENV INSIDE_DEV_CONTAINER=1
+
 USER dev
 WORKDIR /workspace

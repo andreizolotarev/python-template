@@ -4,13 +4,30 @@ All commits must be made manually — do not commit automatically in agent mode.
 ## Dependency management
 This project uses `uv` as the package manager for everything.
 ## Development environment
-**All development happens inside the Docker container.** Never run `uv`, `pytest`, `ruff`, or `opencode` directly on the host — only via `docker compose run --rm dev ...`. The container runs as a non-root user (`dev`) matching the host UID/GID; always build with the host IDs and execute every command inside the container:
+**All development happens inside the Docker container.** The container runs as a non-root user (`dev`) matching the host UID/GID; always build with the host IDs:
   - Build: `docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)`
   - Shell: `docker compose run --rm dev bash`
+
+### Where you are running
+Before running project commands, detect your environment — the command form differs:
+
+- **Host (outside the container):** docker is available, `INSIDE_DEV_CONTAINER` is **unset**. You must route every command through the container via `docker compose run --rm dev ...`.
+- **Inside the container:** the env var `INSIDE_DEV_CONTAINER=1` (or `/.dockerenv` exists). You are already in the container, so run commands **directly** — never prefix them with `docker compose run ...` (docker is not available inside, and prefixing would fail).
+
+Quick check: `test -n "$INSIDE_DEV_CONTAINER" && echo in-container || echo on-host`
+
+### Running project commands
+**On the host** (prefix with `docker compose run --rm dev`):
   - Run project: `docker compose run --rm dev python -m {{ project_slug }}`
   - Tests: `docker compose run --rm dev uv run pytest`
   - Lint: `docker compose run --rm dev uv run ruff check`
   - Format: `docker compose run --rm dev uv run ruff format`
+
+**Inside the container** (run directly, no docker prefix):
+  - Run project: `python -m {{ project_slug }}`
+  - Tests: `uv run pytest`
+  - Lint: `uv run ruff check`
+  - Format: `uv run ruff format`
 
 ## MCPs
   - Playwright: screenshots and any Playwright output go in .playwright-mcp/ (gitignored).
