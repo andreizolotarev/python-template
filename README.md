@@ -63,6 +63,30 @@ cp .env.example .env
 
 docker compose passes the variable into the container, and opencode reads it automatically.
 
+### Git inside the container
+
+The dev container authenticates to GitHub using a **Personal Access Token (PAT)** via the [GitHub CLI](https://cli.github.com/) (`gh`), which is installed in the image and configured as the git credential helper. This lets you run `git pull` / `git push` from inside the container instead of relying on the host's VS Code credential flow.
+
+1. Create a PAT with the `repo` scope at <https://github.com/settings/tokens>.
+2. Copy `.env.example` to `.env` and set it:
+   ```bash
+   cp .env.example .env
+   # then edit .env and set:
+   # GITHUB_TOKEN=your_token_here
+   ```
+3. Rebuild the image (the token is read at runtime, not baked in):
+   ```bash
+   docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)
+   ```
+4. From inside the container, `git pull` / `git push` now work without a password prompt.
+
+> **Note:** `GITHUB_TOKEN` is only injected at runtime from your gitignored `.env` — it is never baked into the image. For `git commit`, set your identity once inside the container:
+> ```bash
+> git config --global user.name "Your Name"
+> git config --global user.email "you@example.com"
+> ```
+> (In a persistent container this stays set; in a `--rm` container it resets each run.)
+
 ### VS Code (Remote - Containers)
 
 1. Install the **Dev Containers** extension (`ms-vscode-remote.remote-containers`) in VS Code.

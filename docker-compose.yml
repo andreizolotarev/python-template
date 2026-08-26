@@ -9,6 +9,7 @@ services:
       - venv:/workspace/.venv
     environment:
       - CONTEXT7_API_KEY=${CONTEXT7_API_KEY:-}
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
     stdin_open: true
     tty: true
 

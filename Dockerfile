@@ -3,11 +3,15 @@ FROM python:{{ python_version }}-slim
 ARG USER_ID
 ARG GROUP_ID
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+ && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+ && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list \
+ && apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     ca-certificates \
     build-essential \
+    gh \
     && rm -rf /var/lib/apt/lists/*
 
 # Node.js for MCP tools (Playwright, Context7 via npx)
@@ -39,3 +43,7 @@ ENV INSIDE_DEV_CONTAINER=1
 
 USER dev
 WORKDIR /workspace
+
+# Use GitHub CLI as the git credential helper so `git pull`/`push` work inside
+# the container using GITHUB_TOKEN (passed in at runtime via docker compose).
+RUN git config --global credential.https://github.com.helper '!gh auth git-credential'
