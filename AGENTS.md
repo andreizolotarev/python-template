@@ -3,6 +3,7 @@ When adding new functionality, always add tests and verify that the existing doc
 All commits must be made manually — do not commit automatically in agent mode.
 ## Dependency management
 This project uses `uv` as the package manager for everything.
+{% if use_docker %}
 ## Development environment
 **This template provides an isolated, reproducible development environment that runs entirely inside the Docker container.** The container runs as a non-root user (`dev`) matching the host UID/GID; always build with the host IDs:
   - Build: `docker compose build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)`
@@ -28,6 +29,7 @@ Quick check: `test -n "$INSIDE_DEV_CONTAINER" && echo in-container || echo on-ho
   - Tests: `uv run pytest`
   - Lint: `uv run ruff check`
   - Format: `uv run ruff format`
+{% endif %}
 
 ## MCPs
   - Playwright: screenshots and any Playwright output go in .playwright-mcp/ (gitignored).

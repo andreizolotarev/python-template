@@ -24,6 +24,7 @@ uv sync
 git init
 ```
 
+{% if use_docker %}
 ## Docker development environment
 
 The project includes a Docker-based development environment with opencode, Python/uv, Node.js, and Playwright pre-installed. The container runs as a non-root user (`dev`) whose UID/GID match the host, so files written in the mounted workspace belong to your host user instead of `root`.
@@ -101,6 +102,7 @@ The dev container authenticates to GitHub using a **Personal Access Token (PAT)*
 6. Point the Python extension at the in-container interpreter `/workspace/.venv/bin/python` so linting/type-checking use the container's environment (the `.venv` is a container-only named volume and is invisible on the host).
 
 Remember: develop *inside* the container (see the callout above) — the tooling, `.venv`, and `opencode` all run from within the container for an isolated, reproducible setup.
+{% endif %}
 
 ## Spec-driven development (commands, skills & agents)
 

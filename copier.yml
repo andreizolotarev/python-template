@@ -53,6 +53,9 @@ _exclude:
   - __pycache__
   - "*.pyc"
   - ".git"
+  - "{% if not use_docker %}Dockerfile{% endif %}"
+  - "{% if not use_docker %}docker-compose.yml{% endif %}"
+  - "{% if not use_docker %}.dockerignore{% endif %}"
 
 # _tasks:
 #   - "uv sync"
